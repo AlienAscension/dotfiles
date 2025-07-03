@@ -26,8 +26,7 @@ alias cp='cp -i'
 alias mv='mv -i'
 
 
-# BLE SH (prompt enhancer — Starship still works with it)
-source ~/.local/share/blesh/ble.sh
+
 
 # Enable Starship
 eval "$(starship init bash)"
