@@ -1,0 +1,117 @@
+# SSH Configuration Template
+# Copy this to ~/.ssh/config and customize as needed
+
+# Global settings
+Host *
+    # Use SSH protocol version 2
+    Protocol 2
+    
+    # Enable compression
+    Compression yes
+    
+    # Keep connections alive
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    
+    # Connection timeout
+    ConnectTimeout 10
+    
+    # Use SSH agent for key management
+    AddKeysToAgent yes
+    
+    # Forward SSH agent (be careful with this on untrusted hosts)
+    ForwardAgent no
+    
+    # Disable X11 forwarding by default (enable per host if needed)
+    ForwardX11 no
+    
+    # Use modern ciphers and algorithms
+    Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+    MACs hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,hmac-sha2-256,hmac-sha2-512
+    KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512
+    
+    # Host key algorithms
+    HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ssh-ed25519,ssh-rsa
+    
+    # Disable weak algorithms
+    PubkeyAcceptedKeyTypes ssh-ed25519,ssh-rsa
+
+# Example host configurations (uncomment and modify as needed)
+
+# Personal server example
+# Host personal
+#     HostName your-server.com
+#     User your-username
+#     Port 22
+#     IdentityFile ~/.ssh/id_ed25519
+#     IdentitiesOnly yes
+
+# Work server example
+# Host work
+#     HostName work-server.company.com
+#     User work-username
+#     Port 2222
+#     IdentityFile ~/.ssh/work_key
+#     IdentitiesOnly yes
+#     ProxyJump bastion-host
+
+# GitHub configuration
+# Host github.com
+#     HostName github.com
+#     User git
+#     IdentityFile ~/.ssh/id_ed25519
+#     IdentitiesOnly yes
+
+# GitLab configuration
+# Host gitlab.com
+#     HostName gitlab.com
+#     User git
+#     IdentityFile ~/.ssh/id_ed25519
+#     IdentitiesOnly yes
+
+# Local development VM
+# Host dev
+#     HostName 192.168.1.100
+#     User developer
+#     Port 22
+#     IdentityFile ~/.ssh/dev_key
+#     StrictHostKeyChecking no
+#     UserKnownHostsFile /dev/null
+
+# Bastion/Jump host example
+# Host bastion
+#     HostName bastion.company.com
+#     User your-username
+#     Port 22
+#     IdentityFile ~/.ssh/bastion_key
+#     ControlMaster auto
+#     ControlPath ~/.ssh/control-%r@%h:%p
+#     ControlPersist 10m
+
+# Server behind bastion
+# Host internal-server
+#     HostName internal.company.com
+#     User your-username
+#     Port 22
+#     IdentityFile ~/.ssh/internal_key
+#     ProxyJump bastion
+
+# AWS EC2 instance example
+# Host aws-web
+#     HostName ec2-xx-xx-xx-xx.compute-1.amazonaws.com
+#     User ec2-user
+#     IdentityFile ~/.ssh/aws-key.pem
+#     IdentitiesOnly yes
+
+# Multiple GitHub accounts example
+# Host github-work
+#     HostName github.com
+#     User git
+#     IdentityFile ~/.ssh/github_work_key
+#     IdentitiesOnly yes
+
+# Host github-personal
+#     HostName github.com
+#     User git
+#     IdentityFile ~/.ssh/github_personal_key
+#     IdentitiesOnly yes

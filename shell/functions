@@ -1,0 +1,256 @@
+# Shell Functions
+
+# Create directory and cd into it
+mkcd() {
+    mkdir -p "$1" && cd "$1"
+}
+
+# Extract various archive formats
+extract() {
+    if [ -f "$1" ]; then
+        case "$1" in
+            *.tar.bz2)   tar xjf "$1"     ;;
+            *.tar.gz)    tar xzf "$1"     ;;
+            *.bz2)       bunzip2 "$1"     ;;
+            *.rar)       unrar x "$1"     ;;
+            *.gz)        gunzip "$1"      ;;
+            *.tar)       tar xf "$1"      ;;
+            *.tbz2)      tar xjf "$1"     ;;
+            *.tgz)       tar xzf "$1"     ;;
+            *.zip)       unzip "$1"       ;;
+            *.Z)         uncompress "$1"  ;;
+            *.7z)        7z x "$1"        ;;
+            *)           echo "'$1' cannot be extracted via extract()" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
+
+# Find file by name
+ff() {
+    find . -type f -name "*$1*" 2>/dev/null
+}
+
+# Find directory by name
+fd() {
+    find . -type d -name "*$1*" 2>/dev/null
+}
+
+# Grep with context and color
+grp() {
+    grep -r -n -H -C 5 --include="*.txt" --include="*.py" --include="*.js" --include="*.html" --include="*.css" --include="*.php" --include="*.rb" "$1" .
+}
+
+# Quick backup of a file
+backup() {
+    cp "$1"{,.bak}
+}
+
+# Show file info
+info() {
+    if [ -f "$1" ]; then
+        echo "File: $1"
+        echo "Size: $(du -h "$1" | cut -f1)"
+        echo "Type: $(file -b "$1")"
+        echo "Modified: $(stat -c %y "$1")"
+        echo "Permissions: $(stat -c %A "$1")"
+    else
+        echo "File not found: $1"
+    fi
+}
+
+# Quick note taking
+note() {
+    local note_file="$HOME/notes.txt"
+    if [ $# -eq 0 ]; then
+        $EDITOR "$note_file"
+    else
+        echo "$(date): $*" >> "$note_file"
+    fi
+}
+
+# Show PATH in readable format
+path() {
+    echo "$PATH" | tr ':' '\n' | nl
+}
+
+# Show disk usage of current directory
+usage() {
+    du -h --max-depth=1 | sort -hr
+}
+
+# Process management
+pskill() {
+    ps aux | grep "$1" | grep -v grep | awk '{print $2}' | xargs kill -9
+}
+
+# Git functions
+gclone() {
+    git clone "$1" && cd "$(basename "$1" .git)"
+}
+
+# Create and switch to new git branch
+gnb() {
+    git checkout -b "$1"
+}
+
+# Git commit with message
+gcm() {
+    git add -A && git commit -m "$1"
+}
+
+# Git push current branch
+gpush() {
+    local branch=$(git branch --show-current)
+    git push -u origin "$branch"
+}
+
+# Show git log with graph
+glog() {
+    git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+}
+
+# Weather function
+weather() {
+    local city="${1:-}"
+    curl -s "wttr.in/$city"
+}
+
+# Convert video to gif
+vid2gif() {
+    if [ $# -ne 2 ]; then
+        echo "Usage: vid2gif input.mp4 output.gif"
+        return 1
+    fi
+    ffmpeg -i "$1" -vf "fps=10,scale=320:-1:flags=lanczos" -c:v gif "$2"
+}
+
+# Create a new tmux session
+tnew() {
+    if [ $# -eq 0 ]; then
+        tmux new-session
+    else
+        tmux new-session -s "$1"
+    fi
+}
+
+# Attach to tmux session or create new one
+ta() {
+    if [ $# -eq 0 ]; then
+        tmux attach || tmux new-session
+    else
+        tmux attach -t "$1" || tmux new-session -s "$1"
+    fi
+}
+
+# Kill tmux session
+tkill() {
+    if [ $# -eq 0 ]; then
+        tmux kill-session
+    else
+        tmux kill-session -t "$1"
+    fi
+}
+
+# Docker functions
+drun() {
+    docker run -it --rm "$@"
+}
+
+dexec() {
+    docker exec -it "$1" /bin/bash
+}
+
+# Network functions
+myip() {
+    curl -s https://ipinfo.io/ip
+}
+
+localip() {
+    ip route get 1.1.1.1 | awk '{print $7}' | head -1
+}
+
+# Port check
+port() {
+    lsof -i :"$1"
+}
+
+# Quick HTTP server
+serve() {
+    local port="${1:-8000}"
+    python3 -m http.server "$port"
+}
+
+# JSON pretty print
+json() {
+    if [ $# -eq 0 ]; then
+        python3 -m json.tool
+    else
+        cat "$1" | python3 -m json.tool
+    fi
+}
+
+# URL encode/decode
+urlencode() {
+    python3 -c "import urllib.parse; print(urllib.parse.quote('$1'))"
+}
+
+urldecode() {
+    python3 -c "import urllib.parse; print(urllib.parse.unquote('$1'))"
+}
+
+# Base64 encode/decode
+b64encode() {
+    echo -n "$1" | base64
+}
+
+b64decode() {
+    echo -n "$1" | base64 -d
+}
+
+# Generate random password
+genpass() {
+    local length="${1:-16}"
+    openssl rand -base64 "$length" | tr -d "=+/" | cut -c1-"$length"
+}
+
+# Quick calculator
+calc() {
+    python3 -c "print($*)"
+}
+
+# Show colors
+colors() {
+    for i in {0..255}; do
+        printf "\x1b[38;5;${i}mcolor${i}\x1b[0m\n"
+    done | column -c 80
+}
+
+# System info
+sysinfo() {
+    echo "System Information:"
+    echo "=================="
+    echo "Hostname: $(hostname)"
+    echo "OS: $(uname -s)"
+    echo "Kernel: $(uname -r)"
+    echo "Architecture: $(uname -m)"
+    echo "Uptime: $(uptime -p 2>/dev/null || uptime)"
+    echo "Memory: $(free -h | awk '/^Mem:/ {print $3 "/" $2}')"
+    echo "Disk: $(df -h / | awk 'NR==2 {print $3 "/" $2 " (" $5 " used)"}')"
+    echo "Load: $(uptime | awk -F'load average:' '{print $2}')"
+}
+
+# Quick edit function for common config files
+edit() {
+    case "$1" in
+        bashrc|bash)     $EDITOR ~/.bashrc ;;
+        vimrc|vim|nvim)  $EDITOR ~/.config/nvim/init.lua ;;
+        tmux)            $EDITOR ~/.tmux.conf ;;
+        git)             $EDITOR ~/.gitconfig ;;
+        aliases)         $EDITOR ~/.aliases ;;
+        functions)       $EDITOR ~/.functions ;;
+        exports)         $EDITOR ~/.exports ;;
+        *)               $EDITOR "$1" ;;
+    esac
+}

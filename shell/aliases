@@ -1,0 +1,184 @@
+# Shell Aliases
+
+# Neovim aliases - set v as main editor
+alias v='nvim'
+alias vi='nvim'
+alias vim='nvim'
+alias nv='nvim'
+
+# Enhanced ls commands
+alias ls='ls --color=auto'
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+alias lt='ls -altr'  # Sort by time, newest last
+alias lh='ls -alh'   # Human readable sizes
+
+# Directory navigation
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ~='cd ~'
+alias -- -='cd -'
+
+# Directory operations
+alias mkdir='mkdir -pv'
+alias rmdir='rmdir -v'
+
+# File operations
+alias cp='cp -iv'
+alias mv='mv -iv'
+alias rm='rm -iv'
+alias ln='ln -iv'
+
+# Grep with color
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+
+# Git aliases
+alias g='git'
+alias ga='git add'
+alias gaa='git add --all'
+alias gb='git branch'
+alias gba='git branch -a'
+alias gbd='git branch -d'
+alias gc='git commit -v'
+alias gca='git commit -v -a'
+alias gcam='git commit -a -m'
+alias gcm='git commit -m'
+alias gco='git checkout'
+alias gcb='git checkout -b'
+alias gd='git diff'
+alias gdc='git diff --cached'
+alias gl='git pull'
+alias glog='git log --oneline --decorate --graph'
+alias gloga='git log --oneline --decorate --graph --all'
+alias gp='git push'
+alias gst='git status'
+alias gsta='git stash'
+alias gstp='git stash pop'
+
+# Docker aliases (if docker is available)
+if command -v docker >/dev/null 2>&1; then
+    alias d='docker'
+    alias dc='docker-compose'
+    alias dps='docker ps'
+    alias dpsa='docker ps -a'
+    alias di='docker images'
+    alias dex='docker exec -it'
+    alias dlog='docker logs -f'
+    alias dstop='docker stop $(docker ps -q)'
+    alias drm='docker rm $(docker ps -aq)'
+    alias drmi='docker rmi $(docker images -q)'
+fi
+
+# Kubernetes aliases (if kubectl is available)
+if command -v kubectl >/dev/null 2>&1; then
+    alias k='kubectl'
+    alias kgp='kubectl get pods'
+    alias kgs='kubectl get services'
+    alias kgd='kubectl get deployments'
+    alias kdp='kubectl describe pod'
+    alias kds='kubectl describe service'
+    alias kdd='kubectl describe deployment'
+    alias kaf='kubectl apply -f'
+    alias kdel='kubectl delete'
+    alias klog='kubectl logs -f'
+    alias kex='kubectl exec -it'
+fi
+
+# System monitoring
+alias htop='htop -C'
+alias df='df -h'
+alias du='du -h'
+alias free='free -h'
+alias ps='ps aux'
+
+# Network
+alias ping='ping -c 5'
+alias ports='netstat -tulanp'
+alias myip='curl -s https://ipinfo.io/ip'
+
+# Archive operations
+alias tar='tar -v'
+alias untar='tar -xvf'
+alias targz='tar -czvf'
+alias untargz='tar -xzvf'
+
+# Find and search
+alias fd='fd --hidden --follow'
+alias rg='rg --hidden --follow --smart-case'
+
+# Process management
+alias psg='ps aux | grep -v grep | grep -i -e VSZ -e'
+alias killall='killall -v'
+
+# Development shortcuts
+alias serve='python3 -m http.server 8000'
+alias json='python3 -m json.tool'
+
+# Quick edits
+alias bashrc='$EDITOR ~/.bashrc'
+alias vimrc='$EDITOR ~/.config/nvim/init.lua'
+alias tmuxconf='$EDITOR ~/.tmux.conf'
+alias aliases='$EDITOR ~/.aliases'
+
+# Tmux
+alias t='tmux'
+alias ta='tmux attach'
+alias tls='tmux list-sessions'
+alias tnew='tmux new-session -s'
+
+# System updates (Ubuntu/Debian)
+if command -v apt >/dev/null 2>&1; then
+    alias update='sudo apt update && sudo apt upgrade'
+    alias install='sudo apt install'
+    alias search='apt search'
+fi
+
+# System updates (Arch Linux)
+if command -v pacman >/dev/null 2>&1; then
+    alias update='sudo pacman -Syu'
+    alias install='sudo pacman -S'
+    alias search='pacman -Ss'
+fi
+
+# Reload shell
+alias reload='source ~/.bashrc'
+
+# Weather
+alias weather='curl wttr.in'
+
+# Quick directory jumps (if you use these directories)
+alias projects='cd ~/projects'
+alias downloads='cd ~/Downloads'
+alias documents='cd ~/Documents'
+alias desktop='cd ~/Desktop'
+
+# Safety aliases
+alias chown='chown --preserve-root'
+alias chmod='chmod --preserve-root'
+alias chgrp='chgrp --preserve-root'
+
+# Colorize output
+alias diff='diff --color=auto'
+alias ip='ip --color=auto'
+
+# Modern replacements (if available)
+if command -v bat >/dev/null 2>&1; then
+    alias cat='bat'
+fi
+
+if command -v exa >/dev/null 2>&1; then
+    alias ls='exa'
+    alias ll='exa -la'
+    alias la='exa -a'
+    alias lt='exa -la --sort=modified'
+    alias tree='exa --tree'
+fi
+
+if command -v dust >/dev/null 2>&1; then
+    alias du='dust'
+fi

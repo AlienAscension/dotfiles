@@ -1,0 +1,136 @@
+[user]
+	name = Your Name
+	email = your.email@example.com
+
+[core]
+	editor = nvim
+	excludesfile = ~/.gitignore_global
+	autocrlf = input
+	safecrlf = true
+	pager = less -FRX
+
+[init]
+	defaultBranch = main
+
+[push]
+	default = simple
+	autoSetupRemote = true
+
+[pull]
+	rebase = false
+
+[merge]
+	tool = nvim
+	conflictstyle = diff3
+
+[mergetool "nvim"]
+	cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+
+[diff]
+	tool = nvim
+
+[difftool "nvim"]
+	cmd = nvim -d $LOCAL $REMOTE
+
+[color]
+	ui = auto
+	branch = auto
+	diff = auto
+	status = auto
+
+[color "branch"]
+	current = yellow reverse
+	local = yellow
+	remote = green
+
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+
+[color "status"]
+	added = yellow
+	changed = green
+	untracked = cyan
+
+[alias]
+	# Basic shortcuts
+	st = status
+	ci = commit
+	co = checkout
+	br = branch
+	
+	# More complex aliases
+	unstage = reset HEAD --
+	last = log -1 HEAD
+	visual = !gitk
+	
+	# Log aliases
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	lga = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all
+	
+	# Show files ignored by git
+	ignored = ls-files -o -i --exclude-standard
+	
+	# Undo last commit but keep changes
+	undo = reset --soft HEAD~1
+	
+	# Amend last commit
+	amend = commit --amend --no-edit
+	
+	# Show current branch
+	current = branch --show-current
+	
+	# Clean up merged branches
+	cleanup = "!git branch --merged | grep -v '\\*\\|main\\|master\\|develop' | xargs -n 1 git branch -d"
+	
+	# Show contributors
+	contributors = shortlog -sn
+	
+	# Show file history
+	filelog = log -u
+	
+	# Show modified files in last commit
+	dl = "!git ll -1"
+	
+	# Show a diff last commit
+	dlc = diff --cached HEAD^
+	
+	# Find a file path in codebase
+	f = "!git ls-files | grep -i"
+	
+	# Search/grep on codebase
+	grep = grep -Ii
+	gr = grep -Ii
+	
+	# Rename branch
+	rename = branch -m
+	
+	# Show aliases
+	aliases = config --get-regexp alias
+
+[help]
+	autocorrect = 1
+
+[rerere]
+	enabled = true
+
+[branch]
+	autosetupmerge = true
+
+[status]
+	showUntrackedFiles = all
+
+[transfer]
+	fsckobjects = true
+
+[fetch]
+	fsckobjects = true
+
+[receive]
+	fsckObjects = true
+
+# Include local gitconfig if it exists
+[include]
+	path = ~/.gitconfig.local
