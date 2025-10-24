@@ -28,7 +28,7 @@ if ! shopt -oq posix; then
 fi
 
 # Kubernetes config (keep your existing setup)
-export KUBECONFIG=/home/linus/.kube/buero-tenant-linus.yaml
+export KUBECONFIG=/home/linus/.kube/buero-management.yaml
 
 # Enable kubectl autocompletion
 if command -v kubectl &>/dev/null; then
@@ -38,6 +38,7 @@ fi
 
 # Kubernetes stuff
 alias ctx='kubie ctx'
+alias k='kubectl'
 
 # File listing aliases
 alias ls='lsd -l'
@@ -76,3 +77,17 @@ fi
 
 # Load local bashrc if it exists
 [ -f ~/.bashrc.local ] && source ~/.bashrc.local
+
+
+
+### MANAGED BY RANCHER DESKTOP START (DO NOT EDIT)
+export PATH="/home/linus/.rd/bin:$PATH"
+### MANAGED BY RANCHER DESKTOP END (DO NOT EDIT)
+
+
+# Set Nvim as default editor
+export EDITOR=nvim
+export VISUAL=nvim
+
+# Enable Krew Plugins for kubectl
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
